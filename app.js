@@ -1,20 +1,28 @@
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-
+var express = require("express");
 var app = express();
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static("public"));
+app.set("view engine", "ejs");
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.get("/", function(req, res){
+  res.render("home");
+});
 
-module.exports = app;
+app.get("/fallinlovewith/:thing", function(req, res){
+  var thing = req.params.thing;
+  res.render("love", {thingVar: thing});
+});
+
+app.get("/posts", function(req, res){
+  var posts = [
+    {title: "Post 1", author: "Yash"},
+    {title: "My Adorable pet", author: "DustiBun"},
+    {title: "Post 3", author: "SussiePoo"}
+  ];
+
+  res.render("posts", {posts: posts});
+});
+
+app.listen(3000, function () {
+  console.log("Server has started");
+});
