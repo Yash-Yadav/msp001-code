@@ -1,6 +1,20 @@
-const express = require('express');
-const app = express();
-const port = process.env.PORT || 3000;
+var express = require('express');
+var path = require('path');
+var cookieParser = require('cookie-parser');
+var logger = require('morgan');
 
-app.get('/', (req, res) => res.send('Hello world'));
-app.listen(port, () => console.log('Application started at=> http://localhost::'+port,));
+var indexRouter = require('./routes/index');
+var usersRouter = require('./routes/users');
+
+var app = express();
+
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
+
+module.exports = app;
